@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native';
-import { Swipeable } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Swipeable, { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../theme/theme';
 import { Card } from '../types';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { DeleteModal } from './DeleteModal';
 
 interface CardRowProps {
   card: Card;
@@ -11,52 +12,86 @@ interface CardRowProps {
 }
 
 export function CardRow({ card, onDelete }: CardRowProps) {
-  const swipeableRef = useRef<Swipeable>(null);
+  const swipeableRef = useRef<SwipeableMethods>(null);
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+
+  const handleDelete = () => {
+    setDeleteModalVisible(true);
+  };
+
+  const handleConfirmDelete = () => {
+    setDeleteModalVisible(false);
+    swipeableRef.current?.close();
+    onDelete();
+  };
 
   const renderRightActions = () => {
     return (
-      <View style={styles.deleteAction}>
+      <TouchableOpacity 
+        style={styles.deleteAction}
+        onPress={handleDelete}
+      >
         <Ionicons name="trash-outline" size={24} color={theme.colors.textPrimary} />
-      </View>
+      </TouchableOpacity>
     );
   };
 
   return (
-    <Swipeable
-      ref={swipeableRef}
-      renderRightActions={renderRightActions}
-      onSwipeableOpen={(direction) => {
-        if (direction === 'right') {
-          onDelete();
-        }
-      }}
-    >
-      <View style={styles.container}>
-        <Text style={styles.question} numberOfLines={2}>
-          {card.question}
-        </Text>
-      </View>
-    </Swipeable>
+    <>
+      <Swipeable
+        ref={swipeableRef}
+        renderRightActions={renderRightActions}
+      >
+        <View style={styles.container}>
+          <Text style={styles.question} numberOfLines={2}>
+            {card.question}
+          </Text>
+          <TouchableOpacity 
+            style={styles.deleteButton}
+            onPress={handleDelete}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            accessibilityRole="button"
+            accessibilityLabel="Delete card"
+          >
+            <Ionicons name="trash-outline" size={20} color={theme.colors.textSecondary} />
+          </TouchableOpacity>
+        </View>
+      </Swipeable>
+
+      <DeleteModal
+        visible={isDeleteModalVisible}
+        onClose={() => setDeleteModalVisible(false)}
+        onConfirm={handleConfirmDelete}
+      />
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: theme.colors.surfaceElevated,
     padding: theme.spacing.lg,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.surfacePressed,
   },
   question: {
+    flex: 1,
     fontFamily: theme.typography.fonts.bodyMedium,
     fontSize: theme.typography.sizes.md,
     color: theme.colors.textPrimary,
+    marginRight: theme.spacing.md,
+  },
+  deleteButton: {
+    padding: theme.spacing.xs,
   },
   deleteAction: {
     backgroundColor: theme.colors.danger,
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingRight: theme.spacing.xl,
-    width: '100%',
+    width: 80,
   },
 });
