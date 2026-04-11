@@ -3,7 +3,8 @@ import { Swipeable } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../theme/theme';
 import { Card } from '../types';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { DeleteModal } from './DeleteModal';
 
 interface CardRowProps {
   card: Card;
@@ -12,20 +13,15 @@ interface CardRowProps {
 
 export function CardRow({ card, onDelete }: CardRowProps) {
   const swipeableRef = useRef<Swipeable>(null);
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const handleDelete = () => {
-    Alert.alert(
-      'Delete Card',
-      'Are you sure you want to delete this card?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { 
-          text: 'Delete', 
-          style: 'destructive',
-          onPress: onDelete
-        },
-      ]
-    );
+    setDeleteModalVisible(true);
+  };
+
+  const handleConfirmDelete = () => {
+    setDeleteModalVisible(false);
+    onDelete();
   };
 
   const renderRightActions = () => {
@@ -56,6 +52,12 @@ export function CardRow({ card, onDelete }: CardRowProps) {
           <Ionicons name="trash-outline" size={20} color={theme.colors.textSecondary} />
         </TouchableOpacity>
       </View>
+
+      <DeleteModal
+        visible={isDeleteModalVisible}
+        onClose={() => setDeleteModalVisible(false)}
+        onConfirm={handleConfirmDelete}
+      />
     </Swipeable>
   );
 }
