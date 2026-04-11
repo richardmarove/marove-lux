@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, Pressable } from 'react-native';
-import Animated, { FadeIn } from 'react-native-reanimated';
+
 import * as Haptics from 'expo-haptics';
 import { theme } from '../theme/theme';
 
@@ -39,10 +39,7 @@ export function DeleteModal({ visible, onClose, onConfirm }: DeleteModalProps) {
         <Pressable style={StyleSheet.absoluteFill} onPress={handleCancel} />
         
         {visible && (
-          <Animated.View 
-            entering={FadeIn.duration(200)}
-            style={styles.card}
-          >
+          <View style={styles.card}>
             <View style={styles.content}>
               <Text style={styles.title}>Delete Card?</Text>
               <Text style={styles.message}>
@@ -67,7 +64,7 @@ export function DeleteModal({ visible, onClose, onConfirm }: DeleteModalProps) {
                 </TouchableOpacity>
               </View>
             </View>
-          </Animated.View>
+          </View>
         )}
       </View>
     </Modal>
