@@ -10,8 +10,6 @@ interface DeleteModalProps {
   onConfirm: () => void;
 }
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
 export function DeleteModal({ visible, onClose, onConfirm }: DeleteModalProps) {
   useEffect(() => {
     if (visible) {
