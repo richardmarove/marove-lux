@@ -50,6 +50,8 @@ export function DeleteModal({ visible, onClose, onConfirm }: DeleteModalProps) {
                 style={styles.cancelButton}
                 onPress={handleCancel}
                 activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel="Cancel deletion"
               >
                 <Text style={styles.cancelText}>Cancel</Text>
               </TouchableOpacity>
@@ -58,6 +60,8 @@ export function DeleteModal({ visible, onClose, onConfirm }: DeleteModalProps) {
                 style={styles.deleteButton}
                 onPress={handleConfirm}
                 activeOpacity={0.8}
+                accessibilityRole="button"
+                accessibilityLabel="Confirm delete"
               >
                 <Text style={styles.deleteText}>Delete</Text>
               </TouchableOpacity>
