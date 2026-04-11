@@ -38,34 +38,32 @@ export function DeleteModal({ visible, onClose, onConfirm }: DeleteModalProps) {
         {/* We use a full-screen pressable for backdrop dismissal */}
         <Pressable style={StyleSheet.absoluteFill} onPress={handleCancel} />
         
-        {visible && (
-          <View style={styles.card}>
-            <View style={styles.content}>
-              <Text style={styles.title}>Delete Card?</Text>
-              <Text style={styles.message}>
-                This action cannot be undone. Are you sure you want to discard this item permanently?
-              </Text>
+        <View style={styles.card}>
+          <View style={styles.content}>
+            <Text style={styles.title}>Delete Card?</Text>
+            <Text style={styles.message}>
+              This action cannot be undone. Are you sure you want to discard this item permanently?
+            </Text>
 
-              <View style={styles.buttonRow}>
-                <TouchableOpacity 
-                  style={styles.cancelButton}
-                  onPress={handleCancel}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.cancelText}>Cancel</Text>
-                </TouchableOpacity>
+            <View style={styles.buttonRow}>
+              <TouchableOpacity 
+                style={styles.cancelButton}
+                onPress={handleCancel}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.cancelText}>Cancel</Text>
+              </TouchableOpacity>
 
-                <TouchableOpacity 
-                  style={styles.deleteButton}
-                  onPress={handleConfirm}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.deleteText}>Delete</Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity 
+                style={styles.deleteButton}
+                onPress={handleConfirm}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.deleteText}>Delete</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        )}
+        </View>
       </View>
     </Modal>
   );
