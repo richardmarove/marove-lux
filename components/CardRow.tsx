@@ -21,6 +21,7 @@ export function CardRow({ card, onDelete }: CardRowProps) {
 
   const handleConfirmDelete = () => {
     setDeleteModalVisible(false);
+    swipeableRef.current?.close();
     onDelete();
   };
 
