@@ -37,29 +37,33 @@ export function CardRow({ card, onDelete }: CardRowProps) {
   };
 
   return (
-    <Swipeable
-      ref={swipeableRef}
-      renderRightActions={renderRightActions}
-    >
-      <View style={styles.container}>
-        <Text style={styles.question} numberOfLines={2}>
-          {card.question}
-        </Text>
-        <TouchableOpacity 
-          style={styles.deleteButton}
-          onPress={handleDelete}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <Ionicons name="trash-outline" size={20} color={theme.colors.textSecondary} />
-        </TouchableOpacity>
-      </View>
+    <>
+      <Swipeable
+        ref={swipeableRef}
+        renderRightActions={renderRightActions}
+      >
+        <View style={styles.container}>
+          <Text style={styles.question} numberOfLines={2}>
+            {card.question}
+          </Text>
+          <TouchableOpacity 
+            style={styles.deleteButton}
+            onPress={handleDelete}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            accessibilityRole="button"
+            accessibilityLabel="Delete card"
+          >
+            <Ionicons name="trash-outline" size={20} color={theme.colors.textSecondary} />
+          </TouchableOpacity>
+        </View>
+      </Swipeable>
 
       <DeleteModal
         visible={isDeleteModalVisible}
         onClose={() => setDeleteModalVisible(false)}
         onConfirm={handleConfirmDelete}
       />
-    </Swipeable>
+    </>
   );
 }
 
