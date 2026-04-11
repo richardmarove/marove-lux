@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { Swipeable } from 'react-native-gesture-handler';
+import Swipeable, { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../theme/theme';
 import { Card } from '../types';
@@ -12,7 +12,7 @@ interface CardRowProps {
 }
 
 export function CardRow({ card, onDelete }: CardRowProps) {
-  const swipeableRef = useRef<Swipeable>(null);
+  const swipeableRef = useRef<SwipeableMethods>(null);
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const handleDelete = () => {
