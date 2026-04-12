@@ -14,7 +14,9 @@ export default function DeckScreen() {
 
   const deck = decks.find(d => d.id === id);
 
-  if (!deck) return null;
+  if (!deck) {
+    return <View style={styles.container} />;
+  }
 
   return (
     <View style={styles.container}>

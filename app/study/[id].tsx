@@ -84,7 +84,9 @@ export default function StudyScreen() {
     setIsFlipped(!isFlipped);
   };
 
-  if (!deck || !currentCard) return null;
+  if (!deck || !currentCard) {
+    return <View style={styles.container} />;
+  }
 
   const progress = totalInitialCards === 0 ? 0 : learnedCount / totalInitialCards;
 
