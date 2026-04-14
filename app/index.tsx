@@ -10,9 +10,10 @@ import { Button } from '../components/Button';
 
 export default function Index() {
   const router = useRouter();
-  const { decks, addDeck, deleteDeck } = useData();
+  const { decks, addDeck, deleteDeck, getAllDueCards, getDueCountForDeck, isLoaded } = useData();
   const [isModalVisible, setModalVisible] = useState(false);
   const [newDeckName, setNewDeckName] = useState('');
+  const totalDueCount = isLoaded ? getAllDueCards().length : 0;
 
   const handleCreateDeck = () => {
     if (newDeckName.trim()) {
@@ -39,9 +40,36 @@ export default function Index() {
         data={decks}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContent}
+        ListHeaderComponent={
+          decks.length > 0 ? (
+            <View style={styles.summaryCard}>
+              <Text style={styles.summaryEyebrow}>Study Queue</Text>
+              <Text style={styles.summaryTitle}>
+                {isLoaded ? `${totalDueCount} Due Today` : 'Loading due cards...'}
+              </Text>
+              <Text style={styles.summarySubtitle}>
+                {isLoaded
+                  ? totalDueCount === 0
+                    ? 'You are caught up for now.'
+                    : 'Review every due card across all of your decks in one session.'
+                  : 'Checking your review schedule from saved progress.'}
+              </Text>
+              <Button
+                title="Quick Study"
+                onPress={() => router.push('/study/due')}
+                disabled={!isLoaded || totalDueCount === 0}
+              />
+            </View>
+          ) : null
+        }
         renderItem={({ item }) => (
           <DeckCard
             deck={item}
+            subtitle={
+              isLoaded
+                ? `${getDueCountForDeck(item.id)} due • ${item.cards.length} cards`
+                : `${item.cards.length} cards`
+            }
             onPress={() => router.push(`/deck/${item.id}`)}
             onLongPress={() => handleLongPress(item.id, item.name)}
           />
@@ -104,6 +132,36 @@ const styles = StyleSheet.create({
     padding: theme.spacing.xl,
     paddingBottom: 100, // Space for FAB
     flexGrow: 1,
+  },
+  summaryCard: {
+    backgroundColor: theme.colors.surfaceElevated,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.xl,
+    marginBottom: theme.spacing.xl,
+    borderWidth: 1,
+    borderColor: theme.colors.surfacePressed,
+    ...theme.shadows.sm,
+  },
+  summaryEyebrow: {
+    fontFamily: theme.typography.fonts.bodyMedium,
+    fontSize: theme.typography.sizes.xs,
+    color: theme.colors.accentMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 2,
+    marginBottom: theme.spacing.sm,
+  },
+  summaryTitle: {
+    fontFamily: theme.typography.fonts.heading,
+    fontSize: theme.typography.sizes.xxl,
+    color: theme.colors.textPrimary,
+    marginBottom: theme.spacing.sm,
+  },
+  summarySubtitle: {
+    fontFamily: theme.typography.fonts.body,
+    fontSize: theme.typography.sizes.md,
+    color: theme.colors.textSecondary,
+    marginBottom: theme.spacing.xl,
+    lineHeight: 22,
   },
   modalOverlay: {
     flex: 1,

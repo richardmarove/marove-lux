@@ -1,5 +1,5 @@
-import React, { useLayoutEffect } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, FlatList, StyleSheet, Text } from 'react-native';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { theme } from '../../theme/theme';
 import { useData } from '../../context/DataContext';
@@ -10,13 +10,15 @@ import { Button } from '../../components/Button';
 export default function DeckScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { decks, deleteCard } = useData();
+  const { decks, deleteCard, getDueCountForDeck, isLoaded } = useData();
 
   const deck = decks.find(d => d.id === id);
 
   if (!deck) {
     return <View style={styles.container} />;
   }
+
+  const dueCount = isLoaded ? getDueCountForDeck(deck.id) : 0;
 
   return (
     <View style={styles.container}>
@@ -28,10 +30,21 @@ export default function DeckScreen() {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <View style={styles.header}>
+            <Text style={styles.summaryText}>
+              {isLoaded ? `${dueCount} Due / ${deck.cards.length} Total` : 'Loading review status...'}
+            </Text>
+            <View style={styles.primaryAction}>
+              <Button 
+                title="Study Due" 
+                onPress={() => router.push(`/study/${deck.id}?mode=due`)}
+                disabled={!isLoaded || dueCount === 0}
+              />
+            </View>
             <Button 
-              title="Study Now" 
-              onPress={() => router.push(`/study/${deck.id}`)}
-              disabled={deck.cards.length === 0}
+              title="Cram All Cards" 
+              variant="ghost"
+              onPress={() => router.push(`/study/${deck.id}?mode=all`)}
+              disabled={!isLoaded || deck.cards.length === 0}
             />
           </View>
         }
@@ -74,6 +87,17 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: theme.spacing.xl,
     marginBottom: theme.spacing.xl,
+  },
+  summaryText: {
+    fontFamily: theme.typography.fonts.bodyMedium,
+    fontSize: theme.typography.sizes.sm,
+    color: theme.colors.textSecondary,
+    marginBottom: theme.spacing.lg,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  primaryAction: {
+    marginBottom: theme.spacing.md,
   },
   footer: {
     position: 'absolute',
