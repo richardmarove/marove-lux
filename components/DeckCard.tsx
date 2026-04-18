@@ -4,11 +4,12 @@ import { Deck } from '../types';
 
 interface DeckCardProps {
   deck: Deck;
+  subtitle: string;
   onPress: () => void;
   onLongPress?: () => void;
 }
 
-export function DeckCard({ deck, onPress, onLongPress }: DeckCardProps) {
+export function DeckCard({ deck, subtitle, onPress, onLongPress }: DeckCardProps) {
   return (
     <TouchableOpacity
       style={styles.card}
@@ -19,7 +20,7 @@ export function DeckCard({ deck, onPress, onLongPress }: DeckCardProps) {
       <View style={styles.accentBar} />
       <View style={styles.content}>
         <Text style={styles.title}>{deck.name}</Text>
-        <Text style={styles.subtitle}>{deck.cards.length} cards</Text>
+        <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
     </TouchableOpacity>
   );

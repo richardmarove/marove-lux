@@ -5,6 +5,7 @@ import { theme } from '../theme/theme';
 import { Card } from '../types';
 import { useRef, useState } from 'react';
 import { DeleteModal } from './DeleteModal';
+import { getLevelLabel } from '../utils/srs';
 
 interface CardRowProps {
   card: Card;
@@ -43,9 +44,14 @@ export function CardRow({ card, onDelete }: CardRowProps) {
         renderRightActions={renderRightActions}
       >
         <View style={styles.container}>
-          <Text style={styles.question} numberOfLines={2}>
-            {card.question}
-          </Text>
+          <View style={styles.content}>
+            <Text style={styles.question} numberOfLines={2}>
+              {card.question}
+            </Text>
+            <View style={styles.metaRow}>
+              <Text style={styles.masteryLabel}>{getLevelLabel(card.level)}</Text>
+            </View>
+          </View>
           <TouchableOpacity 
             style={styles.deleteButton}
             onPress={handleDelete}
@@ -70,22 +76,41 @@ export function CardRow({ card, onDelete }: CardRowProps) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     backgroundColor: theme.colors.surfaceElevated,
     padding: theme.spacing.lg,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.surfacePressed,
   },
-  question: {
+  content: {
     flex: 1,
+    marginRight: theme.spacing.md,
+  },
+  question: {
     fontFamily: theme.typography.fonts.bodyMedium,
     fontSize: theme.typography.sizes.md,
     color: theme.colors.textPrimary,
-    marginRight: theme.spacing.md,
+  },
+  metaRow: {
+    flexDirection: 'row',
+    marginTop: theme.spacing.sm,
+  },
+  masteryLabel: {
+    fontFamily: theme.typography.fonts.bodyMedium,
+    fontSize: theme.typography.sizes.xs,
+    color: theme.colors.accentMuted,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.surfacePressed,
+    borderRadius: theme.borderRadius.full,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs,
+    overflow: 'hidden',
   },
   deleteButton: {
     padding: theme.spacing.xs,
+    marginTop: theme.spacing.xs,
   },
   deleteAction: {
     backgroundColor: theme.colors.danger,

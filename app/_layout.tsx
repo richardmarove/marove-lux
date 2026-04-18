@@ -71,6 +71,7 @@ export default function RootLayout() {
             <Stack.Screen name="index" options={{ title: "Marove's Lux" }} />
             <Stack.Screen name="deck/[id]" options={{ title: 'Deck' }} />
             <Stack.Screen name="study/[id]" options={{ title: 'Study', presentation: 'fullScreenModal' }} />
+            <Stack.Screen name="study/due" options={{ title: 'Quick Study', presentation: 'fullScreenModal' }} />
             <Stack.Screen name="add-card/[deckId]" options={{ title: 'Add Card', presentation: 'modal' }} />
           </Stack>
         </ThemeProvider>

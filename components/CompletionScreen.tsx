@@ -5,21 +5,31 @@ import { theme } from '../theme/theme';
 
 interface CompletionScreenProps {
   totalCards: number;
+  title?: string;
+  subtitle?: string;
   onStudyAgain: () => void;
-  onBackToDeck: () => void;
+  onBack: () => void;
+  backButtonTitle?: string;
 }
 
-export function CompletionScreen({ totalCards, onStudyAgain, onBackToDeck }: CompletionScreenProps) {
+export function CompletionScreen({
+  totalCards,
+  title = 'Session Complete',
+  subtitle,
+  onStudyAgain,
+  onBack,
+  backButtonTitle = 'Back to Deck',
+}: CompletionScreenProps) {
   return (
     <Animated.View entering={FadeIn.duration(500)} style={styles.container}>
       <Text style={styles.emoji}>✨</Text>
-      <Text style={styles.title}>Session Complete</Text>
-      <Text style={styles.subtitle}>You've reviewed {totalCards} cards.</Text>
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.subtitle}>{subtitle ?? `You have reviewed ${totalCards} cards.`}</Text>
 
       <View style={styles.actions}>
         <Button title="Study Again" onPress={onStudyAgain} variant="primary" />
         <View style={{ height: theme.spacing.md }} />
-        <Button title="Back to Deck" onPress={onBackToDeck} variant="ghost" />
+        <Button title={backButtonTitle} onPress={onBack} variant="ghost" />
       </View>
     </Animated.View>
   );
